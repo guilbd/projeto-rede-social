@@ -18,8 +18,26 @@ export class TweetsService {
       data: {
         ...data,
         userId: user,
-      } });
+      },
+    });
   }
+
+  async getAll(): Promise<Tweet[]> {
+    return this.db.tweet.findMany({
+      include: {
+        likes: {
+          select: {
+            userId: true,
+          }
+        },
+        User: {
+          select: {
+            username: true,
+          }
+        }
+      }
+    })
+  } 
 
   @UseGuards(AuthGuard('jwt'))
   async removeTweet(id: number, userId: number): Promise<Tweet> {

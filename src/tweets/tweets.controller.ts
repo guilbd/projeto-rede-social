@@ -4,6 +4,7 @@ import {
   Body,
   Delete,
   Param,
+  Get,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -26,6 +27,14 @@ export class TweetsController {
     const user = Req.user.id;
     return this.db.createTweet(text, user);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(ValidationPipe)
+  @Get('tweet-list')
+  async index(): Promise<Tweet[]> {
+    return this.db.getAll();
+  }
+
 
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(ValidationPipe)

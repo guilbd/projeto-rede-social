@@ -46,6 +46,11 @@ export class UsersService {
             text: true,
           },
         },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
       },
     });
   }
