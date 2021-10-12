@@ -33,6 +33,23 @@ export class UsersService {
     return user;
   }
 
+  async getAll(): Promise<User[]> {
+    return this.db.user.findMany({
+      include: {
+        follows: {
+          select: {
+            followedId: true,
+          },
+        },
+        tweets: {
+          select: {
+            text: true,
+          },
+        },
+      },
+    });
+  }
+
   async findOne(id: number) {
     const user = await this.db.user.findUnique({
       where: { id },

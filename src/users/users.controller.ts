@@ -16,26 +16,31 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly db: UsersService) {}
 
   @Post('create-account')
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return this.db.create(createUserDto);
+  }
+
+  @Get('list')
+  async index(): Promise<User[]>{
+    return this.db.getAll();
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findUnique(@Param('id') id: number) {
-    return this.usersService.findOne(+id);
+    return this.db.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    return this.db.update(+id, updateUserDto);
   }
 
   @Delete('/delete/:id')
   async remove(@Param('id') id: number): Promise<User> {
-    return this.usersService.remove({ id: Number(id) });
+    return this.db.remove({ id: Number(id) });
   }
 }

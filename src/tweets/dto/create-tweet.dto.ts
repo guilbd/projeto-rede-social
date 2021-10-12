@@ -1,4 +1,10 @@
-import { IsString, Length, IsNotEmpty, IsNumber } from 'class-validator';
+import {
+  IsString,
+  Length,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateTweetDto {
   @IsString()
@@ -7,6 +13,6 @@ export class CreateTweetDto {
   text: string;
 
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   userId: number;
 }

@@ -47,7 +47,6 @@ model Like {
   id      Int    @id @default(autoincrement())
   Tweet   Tweet? @relation(fields: [tweetId], references: [id])
   tweetId Int?
-  like    Int    @default(0)
   User    User?  @relation(fields: [userId], references: [id])
   userId  Int?
 }
