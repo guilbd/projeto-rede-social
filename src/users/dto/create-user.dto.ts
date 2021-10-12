@@ -6,24 +6,26 @@ export class CreateUserDto {
   @Length(3, 30)
   username: string;
 
+  @IsNotEmpty()
   @IsString()
-  @Length(2, 50)
-  name: string;
+  @Length(10, 50)
+  email: string;
+
+  @IsOptional()
+  img: string;
 
   @IsNotEmpty()
   @IsString()
   @Length(8, 30)
   password: string;
 
-  @IsOptional()
-  image: string;
-
-  @IsOptional()
-  bio: string;
+  @IsString()
+  @Length(2, 50)
+  displayName: string;
 
   @IsNotEmpty()
   birth: string;
 
-  created: Date;
-  updated: Date;
+  @IsOptional()
+  bio: string;
 }

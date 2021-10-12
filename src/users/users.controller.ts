@@ -14,16 +14,16 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '.prisma/client';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post('create')
+  @Post('create-account')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findUnique(@Param('id') id: number) {
     return this.usersService.findOne(+id);

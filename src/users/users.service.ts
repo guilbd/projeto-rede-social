@@ -37,23 +37,14 @@ export class UsersService {
     const user = await this.db.user.findUnique({
       where: { id },
       include: {
-        followers: {
+        follows: {
           select: {
-            follower: true,
+            followedId: true,
           },
         },
-        following: {
-          select: {
-            following: true,
-          },
-        },
-        tweet: {
+        tweets: {
           select: {
             text: true,
-            emoji: true,
-            tweet_date: true,
-            likes: true,
-            tweet: true,
           },
         },
       },
