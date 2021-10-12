@@ -7,15 +7,11 @@ import { CreateLikeDto } from './dto/create-likes.dto';
 export class LikesService {
   constructor(private db: PrismaService) {}
 
-  
-
   async createLike(data: CreateLikeDto): Promise<Like> {
-    
-    const likeCount = 1;
     const updateTweet = await this.db.like.create({
       data: {
         like: {
-          increment: likeCount,
+          increment: 1,
         },
       },
     });
