@@ -7,6 +7,9 @@ import {
   Param,
   Delete,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,7 +27,7 @@ export class UsersController {
   }
 
   @Get('list')
-  async index(): Promise<User[]>{
+  async index(): Promise<User[]> {
     return this.db.getAll();
   }
 
@@ -39,8 +42,10 @@ export class UsersController {
     return this.db.update(+id, updateUserDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(ValidationPipe)
   @Delete('/delete/:id')
-  async remove(@Param('id') id: number): Promise<User> {
-    return this.db.remove({ id: Number(id) });
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<User> {
+    return this.db.remove(id);
   }
 }

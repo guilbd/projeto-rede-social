@@ -28,16 +28,16 @@ export class TweetsService {
         likes: {
           select: {
             userId: true,
-          }
+          },
         },
         User: {
           select: {
             username: true,
-          }
-        }
-      }
-    })
-  } 
+          },
+        },
+      },
+    });
+  }
 
   @UseGuards(AuthGuard('jwt'))
   async removeTweet(id: number, userId: number): Promise<Tweet> {

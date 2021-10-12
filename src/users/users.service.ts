@@ -2,12 +2,15 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, Prisma } from '.prisma/client';
+import { User } from '.prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma.service';
+import { AuthGuard } from '@nestjs/passport';
+import { UseGuards } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
@@ -79,6 +82,7 @@ export class UsersService {
     return user;
   }
 
+  @UseGuards(AuthGuard('jwt'))
   async update(id: number, data: UpdateUserDto): Promise<User> {
     return this.db.user.update({
       where: { id },
@@ -86,9 +90,25 @@ export class UsersService {
     });
   }
 
-  async remove(where: Prisma.UserWhereUniqueInput): Promise<User> {
+  @UseGuards(AuthGuard('jwt'))
+  async remove(id: number): Promise<User> {
+    const userLogged = await this.db.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!userLogged) {
+      throw new NotFoundException('Tweet não localizado');
+    }
+
+    if (userLogged.id !== id) {
+      throw new UnauthorizedException('Você não possui permissão');
+    }
+
     return this.db.user.delete({
-      where,
+      where: { id },
     });
   }
 }

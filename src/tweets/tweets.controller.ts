@@ -35,7 +35,6 @@ export class TweetsController {
     return this.db.getAll();
   }
 
-
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(ValidationPipe)
   @Delete('del-tweet/:id')
